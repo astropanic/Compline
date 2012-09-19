@@ -11,13 +11,16 @@ class ComplineCommand(sublime_plugin.TextCommand):
 		def foo(index):
 			if(index > -1):
 				line = self.view.line(self.view.sel()[0].begin())
-				src = self.view.substr(line)
-				position = 0
-				match = re.search(r"\S+", src)
+				src = self.view.substr(line).rstrip()
+				match = re.search(r"\S$", src)
 				if(match):
-					length = match.end() - match.start()
-				begin = self.view.sel()[0].begin()-length
-				self.view.replace(edit, sublime.Region(begin, self.view.sel()[0].end()), matches[index])
+					end = match.end()
+					match = re.search(r"\S", src)
+					if(match):
+						start = match.start()
+						length = end - start
+						begin = self.view.sel()[0].begin()-length
+						self.view.replace(edit, sublime.Region(begin, self.view.sel()[0].end()), matches[index])
 		region = sublime.Region(0, self.view.size())
 		lines = self.view.lines(region)
 		target = target().strip()
