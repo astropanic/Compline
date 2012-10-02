@@ -11,8 +11,8 @@ class ComplineCommand(sublime_plugin.TextCommand):
 		def foo(index):
 			if(index > -1):
 				line = self.view.line(self.view.sel()[0].begin())
-				src = self.view.substr(line).rstrip()
-				match = re.search(r"\S$", src)
+				src = self.view.substr(line)
+				match = re.search(r"$", src)
 				if(match):
 					end = match.end()
 					match = re.search(r"\S", src)
