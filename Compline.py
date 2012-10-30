@@ -3,6 +3,14 @@ import sublime, sublime_plugin, re
 class ComplineCommand(sublime_plugin.TextCommand):
 
 	def run(self, edit):
+
+		def uniq(seq): 
+			checked = []
+			for e in seq:
+				if e.strip() not in checked:
+					checked.append(e)
+			return checked
+
 		
 		def target():
 			line = self.view.line(self.view.sel()[0].begin())
@@ -19,11 +27,14 @@ class ComplineCommand(sublime_plugin.TextCommand):
 						match = re.search(r"\S", src)
 						if(match):
 							start = match.start()
-							length = end - start
-							begin = self.view.sel()[i].begin()-length
-							self.view.replace(edit, sublime.Region(begin, self.view.sel()[i].end()), matches[index])
+						else:
+							start = self.view.sel()[i].begin()
+							end = line.end()
+						length = end - start
+						begin = self.view.sel()[i].begin()-length
+						self.view.replace(edit, sublime.Region(begin, self.view.sel()[i].end()), matches[index])
 		region = sublime.Region(0, self.view.size())
 		lines = self.view.lines(region)
 		target = target().strip()
 		matches = [self.view.substr(line).lstrip() for line in lines if self.view.substr(line).lstrip().startswith(target)]
-		sublime.active_window().show_quick_panel(matches, foo)
+		sublime.active_window().show_quick_panel(uniq(matches), foo)
