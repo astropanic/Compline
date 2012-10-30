@@ -19,11 +19,9 @@ class ComplineCommand(sublime_plugin.TextCommand):
 						match = re.search(r"\S", src)
 						if(match):
 							start = match.start()
-						else:
-							start = self.view.sel()[i].begin()
-						length = end - start
-						begin = self.view.sel()[i].begin()-length
-						self.view.replace(edit, sublime.Region(begin, self.view.sel()[i].end()), matches[index])
+							length = end - start
+							begin = self.view.sel()[i].begin()-length
+							self.view.replace(edit, sublime.Region(begin, self.view.sel()[i].end()), matches[index])
 		region = sublime.Region(0, self.view.size())
 		lines = self.view.lines(region)
 		target = target().strip()
