@@ -36,5 +36,5 @@ class ComplineCommand(sublime_plugin.TextCommand):
 		region = sublime.Region(0, self.view.size())
 		lines = self.view.lines(region)
 		target = target().strip()
-		matches = [self.view.substr(line).lstrip() for line in lines if self.view.substr(line).lstrip().startswith(target)]
-		sublime.active_window().show_quick_panel(uniq(matches), foo)
+		matches = uniq([self.view.substr(line).lstrip() for line in lines if self.view.substr(line).lstrip().startswith(target)])
+		sublime.active_window().show_quick_panel(matches, foo)
