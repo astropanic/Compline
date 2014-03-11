@@ -32,9 +32,13 @@ class ComplineCommand(sublime_plugin.TextCommand):
 							end = line.end()
 						length = end - start
 						begin = self.view.sel()[i].begin()-length
-						self.view.replace(edit, sublime.Region(begin, self.view.sel()[i].end()), matches[index])
+						self.view.run_command("compline_complete",{"matches": matches, "i": i, "begin": begin, "index": index})
 		region = sublime.Region(0, self.view.size())
 		lines = self.view.lines(region)
 		target = target().strip()
 		matches = uniq([self.view.substr(line).lstrip() for line in lines if self.view.substr(line).lstrip().startswith(target)])
 		sublime.active_window().show_quick_panel(matches, foo)
+
+class ComplineCompleteCommand(sublime_plugin.TextCommand):
+	def run(self, edit, matches, begin, i, index):
+		self.view.replace(edit, sublime.Region(begin, self.view.sel()[i].end()), matches[index])
